@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/server.js",
-    "dev": "ts-node-dev src/server.ts"
+    "dev": "NODE_ENV=development ts-node-dev src/server.ts"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
