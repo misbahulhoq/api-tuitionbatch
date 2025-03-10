@@ -26,4 +26,15 @@ students.delete("/:id", async (req, res) => {
   res.send(student);
 });
 
+students.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, level } = req.body;
+  const student = await Student.findByIdAndUpdate(
+    id,
+    { name, level },
+    { new: true }
+  );
+  res.send(student);
+});
+
 export default students;

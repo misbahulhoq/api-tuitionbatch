@@ -35,4 +35,10 @@ students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
     const student = yield Student_1.default.findByIdAndDelete(id);
     res.send(student);
 }));
+students.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name, level } = req.body;
+    const student = yield Student_1.default.findByIdAndUpdate(id, { name, level }, { new: true });
+    res.send(student);
+}));
 exports.default = students;
