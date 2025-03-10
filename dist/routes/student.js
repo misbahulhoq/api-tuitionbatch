@@ -26,4 +26,13 @@ students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const student = yield new Student_1.default({ name, level, teacher }).save();
     res.send(student);
 }));
+students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const found = yield Student_1.default.findById(id);
+    if (!found) {
+        return res.status(404).send({ message: "Student not found" });
+    }
+    const student = yield Student_1.default.findByIdAndDelete(id);
+    res.send(student);
+}));
 exports.default = students;

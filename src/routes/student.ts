@@ -16,4 +16,14 @@ students.post("/", async (req, res) => {
   res.send(student);
 });
 
+students.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const found = await Student.findById(id);
+  if (!found) {
+    return res.status(404).send({ message: "Student not found" });
+  }
+  const student = await Student.findByIdAndDelete(id);
+  res.send(student);
+});
+
 export default students;
