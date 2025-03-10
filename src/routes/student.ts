@@ -11,13 +11,7 @@ students.get("/", async (req, res) => {
 });
 
 students.post("/", async (req, res) => {
-  let teacher = "test";
-  const { name, level } = req.body;
-  console.log(req.body);
-  // const studentExists = await Student.findOne({ email });
-  // if (studentExists) {
-  //   return res.status(400).send({ message: "student already exists." });
-  // }
+  const { name, level, teacher } = req.body;
   const student = await new Student({ name, level, teacher }).save();
   res.send(student);
 });
