@@ -15,15 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Student_1 = __importDefault(require("../models/Student"));
 const students = express_1.default.Router();
-students.get("/", (req, res) => {
-    res.send("student");
-});
+students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.headers;
+    console.log(email);
+    const students = yield Student_1.default.find({ teacher: email });
+    res.send(students);
+}));
 students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, teacher } = req.body;
-    const studentExists = yield Student_1.default.findOne({ email });
-    if (studentExists) {
-        return res.status(400).send({ message: "student already exists." });
-    }
-    const student = yield new Student_1.default({ name, email, teacher }).save();
+    let teacher = "test";
+    const { name, level } = req.body;
+    console.log(req.body);
+    // const studentExists = await Student.findOne({ email });
+    // if (studentExists) {
+    //   return res.status(400).send({ message: "student already exists." });
+    // }
+    const student = yield new Student_1.default({ name, level, teacher }).save();
     res.send(student);
 }));
+exports.default = students;

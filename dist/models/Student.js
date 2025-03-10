@@ -39,10 +39,14 @@ const studentSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    email: {
+    // email: {
+    //   type: String,
+    //   required: false,
+    //   unique: true,
+    // },
+    level: {
         type: String,
-        required: false,
-        unique: true,
+        required: true,
     },
     teacher: {
         type: String,

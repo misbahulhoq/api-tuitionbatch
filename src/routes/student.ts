@@ -3,12 +3,16 @@ import Student from "../models/Student";
 
 const students = e.Router();
 
-students.get("/", (req, res) => {
-  res.send("student");
+students.get("/", async (req, res) => {
+  const { email } = req.headers;
+  console.log(email);
+  const students = await Student.find({ teacher: email });
+  res.send(students);
 });
 
 students.post("/", async (req, res) => {
-  const { name, teacher, level } = req.body;
+  let teacher = "test";
+  const { name, level } = req.body;
   console.log(req.body);
   // const studentExists = await Student.findOne({ email });
   // if (studentExists) {
@@ -16,11 +20,6 @@ students.post("/", async (req, res) => {
   // }
   const student = await new Student({ name, level, teacher }).save();
   res.send(student);
-});
-
-students.get("/all", async (req, res) => {
-  const students = await Student.find({});
-  res.send(students);
 });
 
 export default students;
