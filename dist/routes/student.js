@@ -22,8 +22,13 @@ students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(students);
 }));
 students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, level, teacher } = req.body;
-    const student = yield new Student_1.default({ name, level, teacher }).save();
+    const { name, level, uid } = req.body;
+    const { email } = req.headers;
+    const studentExists = yield Student_1.default.findOne({ uid, teacher: email });
+    if (studentExists) {
+        return res.status(400).send({ message: "Student already exists" });
+    }
+    const student = yield new Student_1.default({ name, level, teacher: email }).save();
     res.send(student);
 }));
 students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
