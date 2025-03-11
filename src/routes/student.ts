@@ -5,7 +5,6 @@ const students = e.Router();
 
 students.get("/", async (req, res) => {
   const { email } = req.headers;
-  console.log(email);
   const students = await Student.find({ teacher: email });
   res.send(students);
 });
@@ -17,7 +16,12 @@ students.post("/", async (req, res) => {
   if (studentExists) {
     return res.status(400).send({ message: "Student already exists" });
   }
-  const student = await new Student({ name, level, teacher: email }).save();
+  const student = await new Student({
+    name,
+    level,
+    teacher: email,
+    uid,
+  }).save();
   res.send(student);
 });
 
