@@ -8,7 +8,7 @@ students.get("/", async (req, res) => {
   const students = await Student.find({ teacher: email });
   res.send(students);
 });
-
+// TODO: when a new student is added, that should also be added to attendance sheet.
 students.post("/", async (req, res) => {
   const { name, level, uid } = req.body;
   const { email } = req.headers;
@@ -25,6 +25,7 @@ students.post("/", async (req, res) => {
   res.send(student);
 });
 
+// TODO: when a student is deleted that should also be deleted from attendance sheet
 students.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const found = await Student.findById(id);
