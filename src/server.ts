@@ -6,7 +6,7 @@ import app from "./app";
 const port = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
-  res.send("Hello from tuition-batch api!");
+  res.send({ message: "Hello from tuition-batch api!" });
 });
 
 app.listen(port, () => {

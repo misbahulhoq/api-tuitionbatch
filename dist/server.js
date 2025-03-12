@@ -8,7 +8,7 @@ dotenv_1.default.config();
 const app_1 = __importDefault(require("./app"));
 const port = process.env.PORT || 5000;
 app_1.default.get("/", (req, res) => {
-    res.send("Hello from tuition-batch api!");
+    res.send({ message: "Hello from tuition-batch api!" });
 });
 app_1.default.listen(port, () => {
     console.log(`Server is running on port ${port}`);
