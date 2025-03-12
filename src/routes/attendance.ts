@@ -31,18 +31,35 @@ attendanceRouter.get("/current-date", async (req, res) => {
   res.send(attendance);
 });
 
-attendanceRouter.put("/", async (req, res) => {
+attendanceRouter.put("/:attendanceId/:studentId", async (req, res) => {
   const { sheet, date } = req.body;
   const { email } = req.headers;
-  const formattedDate = new Date(date).toLocaleDateString();
-  const attendance = await AttendanceSheet.findOneAndUpdate(
-    {
-      teacher: email,
-      formattedDate,
-    },
-    { sheet }
-  );
-  res.send(attendance);
+  const { attendanceId, studentId } = req.params;
+
+  try {
+    const attendance = await AttendanceSheet.findOne({
+      _id: attendanceId,
+      "sheet.student": studentId,
+    });
+    if (!attendance) {
+      return res.status(404).json({ message: "Attendance record not found" });
+    }
+    const studentIndex = attendance.sheet.findIndex(
+      (s) => s.student.toString() === studentId
+    );
+    if (studentIndex === -1) {
+      return res
+        .status(404)
+        .send({ message: "Student not found in attendance" });
+    }
+    attendance.sheet[studentIndex].present =
+      !attendance.sheet[studentIndex].present;
+    await attendance.save();
+    res.send({ message: "Attendance updated successfully", attendance });
+    console.log(attendance);
+  } catch (error) {
+    res.status(500).send({ message: "Internal server error", error });
+  }
 });
 
 export default attendanceRouter;

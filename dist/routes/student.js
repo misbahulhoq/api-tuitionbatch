@@ -17,7 +17,6 @@ const Student_1 = __importDefault(require("../models/Student"));
 const students = express_1.default.Router();
 students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
-    console.log(email);
     const students = yield Student_1.default.find({ teacher: email });
     res.send(students);
 }));
@@ -28,7 +27,12 @@ students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     if (studentExists) {
         return res.status(400).send({ message: "Student already exists" });
     }
-    const student = yield new Student_1.default({ name, level, teacher: email }).save();
+    const student = yield new Student_1.default({
+        name,
+        level,
+        teacher: email,
+        uid,
+    }).save();
     res.send(student);
 }));
 students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

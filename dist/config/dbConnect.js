@@ -19,6 +19,11 @@ dotenv_1.default.config();
 function dbConnect() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // mongoose.connect(
+            //   process.env.NODE_ENV === "development"
+            //     ? (process.env.MONGO_URL_DEV as string)
+            //     : (process.env.MONGO_URL as string)
+            // );
             mongoose_1.default.connect(process.env.MONGO_URL);
             console.log("Database connected");
         }
