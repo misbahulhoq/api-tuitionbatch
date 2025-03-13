@@ -56,7 +56,6 @@ attendanceRouter.put("/:attendanceId/:studentId", async (req, res) => {
       !attendance.sheet[studentIndex].present;
     await attendance.save();
     res.send({ message: "Attendance updated successfully", attendance });
-    console.log(attendance);
   } catch (error) {
     res.status(500).send({ message: "Internal server error", error });
   }

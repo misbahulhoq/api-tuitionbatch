@@ -14,12 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Student_1 = __importDefault(require("../models/Student"));
+const Attendancesheet_1 = __importDefault(require("../models/Attendancesheet"));
 const students = express_1.default.Router();
 students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
     const students = yield Student_1.default.find({ teacher: email });
     res.send(students);
 }));
+// TODO: when a new student is added, that should also be added to attendance sheet.
 students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, level, uid } = req.body;
     const { email } = req.headers;
@@ -33,15 +35,33 @@ students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         teacher: email,
         uid,
     }).save();
+    const attendance = yield Attendancesheet_1.default.findOne({
+        teacher: email,
+        formattedDate: new Date().toLocaleDateString(),
+    });
+    if (attendance) {
+        attendance.sheet.push({ student: student._id, present: false });
+        yield attendance.save();
+    }
     res.send(student);
 }));
+// TODO: when a student is deleted that should also be deleted from attendance sheet
 students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    const { email } = req.headers;
     const found = yield Student_1.default.findById(id);
     if (!found) {
         return res.status(404).send({ message: "Student not found" });
     }
     const student = yield Student_1.default.findByIdAndDelete(id);
+    const attendance = yield Attendancesheet_1.default.findOne({
+        teacher: email,
+        formattedDate: new Date().toLocaleDateString(),
+    });
+    if (attendance) {
+        attendance.sheet.pull({ student: id });
+        yield attendance.save();
+    }
     res.send(student);
 }));
 students.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

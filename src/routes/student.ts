@@ -1,5 +1,6 @@
 import e from "express";
 import Student from "../models/Student";
+import AttendanceSheet from "../models/Attendancesheet";
 
 const students = e.Router();
 
@@ -22,17 +23,35 @@ students.post("/", async (req, res) => {
     teacher: email,
     uid,
   }).save();
+  const attendance = await AttendanceSheet.findOne({
+    teacher: email,
+    formattedDate: new Date().toLocaleDateString(),
+  });
+  if (attendance) {
+    attendance.sheet.push({ student: student._id, present: false });
+    await attendance.save();
+  }
   res.send(student);
 });
 
 // TODO: when a student is deleted that should also be deleted from attendance sheet
 students.delete("/:id", async (req, res) => {
   const { id } = req.params;
+  const { email } = req.headers;
   const found = await Student.findById(id);
   if (!found) {
     return res.status(404).send({ message: "Student not found" });
   }
   const student = await Student.findByIdAndDelete(id);
+  const attendance = await AttendanceSheet.findOne({
+    teacher: email,
+    formattedDate: new Date().toLocaleDateString(),
+  });
+  if (attendance) {
+    attendance.sheet.pull({ student: id });
+    await attendance.save();
+  }
+
   res.send(student);
 });
 

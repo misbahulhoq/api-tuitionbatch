@@ -63,7 +63,6 @@ attendanceRouter.put("/:attendanceId/:studentId", (req, res) => __awaiter(void 0
             !attendance.sheet[studentIndex].present;
         yield attendance.save();
         res.send({ message: "Attendance updated successfully", attendance });
-        console.log(attendance);
     }
     catch (error) {
         res.status(500).send({ message: "Internal server error", error });
