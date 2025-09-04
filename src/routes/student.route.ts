@@ -9,22 +9,23 @@ students.get("/", async (req, res) => {
   const students = await Student.find({ teacher: email });
   res.send(students);
 });
+
 // TODO: when a new student is added, that should also be added to attendance sheet.
 students.post("/", async (req, res) => {
-  const { name, level, uid } = req.body;
-  const { email } = req.headers;
-  const studentExists = await Student.findOne({ uid, teacher: email });
+  const { name, level, uid, teacher } = req.body;
+
+  const studentExists = await Student.findOne({ uid, teacher });
   if (studentExists) {
     return res.status(400).send({ message: "Student already exists" });
   }
   const student = await new Student({
     name,
     level,
-    teacher: email,
+    teacher,
     uid,
   }).save();
   const attendance = await AttendanceSheet.findOne({
-    teacher: email,
+    teacher,
     formattedDate: new Date().toLocaleDateString(),
   });
   if (attendance) {

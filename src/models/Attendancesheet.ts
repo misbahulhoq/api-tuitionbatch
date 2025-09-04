@@ -30,6 +30,7 @@ const attendanceSchema = new mongoose.Schema(
     },
     teacher: {
       type: String,
+      match: [/.+\@.+\..+/, "Please enter a valid email address"],
       required: true,
     },
   },

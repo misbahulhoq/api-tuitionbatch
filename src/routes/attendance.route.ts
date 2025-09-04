@@ -24,6 +24,7 @@ attendanceRouter.post("/", async (req, res) => {
 
 attendanceRouter.get("/current-date", async (req, res) => {
   const { email } = req.headers;
+  console.log(email);
   const attendance = await AttendanceSheet.find({
     teacher: email,
     formattedDate: new Date().toLocaleDateString(),
@@ -36,6 +37,8 @@ attendanceRouter.get("/history", async (req, res) => {
   const attendance = await AttendanceSheet.find({
     teacher: email,
   }).populate("sheet.student");
+  console.log(attendance);
+  console.log(attendance[0]?.sheet);
   res.send(attendance);
 });
 

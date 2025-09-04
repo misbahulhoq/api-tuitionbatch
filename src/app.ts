@@ -5,8 +5,6 @@ import routes from "./config/routes";
 const app = express();
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import session from "express-session";
-import "./config/passport.config";
 
 const swaggerOptions: swaggerJSDoc.Options = {
   swaggerDefinition: {
@@ -17,8 +15,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
       description: "API documentation for tuition batch app.",
     },
   },
-  apis: ["./modules/*.ts", "./modules/*.js"],
+  apis: ["./routes/*.ts", "./routes/*.js"],
 };
+
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // connect database
@@ -33,13 +32,6 @@ if (process.env.NODE_ENV === "development") {
   origin = ["https://tuitionbatch.vercel.app"];
 }
 // middlewares
-app.use(
-  session({
-    secret: "",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
 app.use(
   cors({
     origin,

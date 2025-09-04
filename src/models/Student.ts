@@ -9,11 +9,10 @@ const studentSchema = new Schema({
     type: String,
     required: true,
   },
-  // email: {
-  //   type: String,
-  //   required: false,
-  //   unique: true,
-  // },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
   level: {
     type: String,
     required: true,
