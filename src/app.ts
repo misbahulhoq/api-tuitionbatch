@@ -3,6 +3,22 @@ import cors from "cors";
 import { dbConnect } from "./config/dbConnect";
 import routes from "./config/routes";
 const app = express();
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import session from "express-session";
+
+const swaggerOptions: swaggerJSDoc.Options = {
+  swaggerDefinition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Tuition batch api.",
+      version: "1.0.0",
+      description: "API documentation for tuition batch app.",
+    },
+  },
+  apis: ["./modules/*.ts", "./modules/*.js"],
+};
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // connect database
 dbConnect();
@@ -16,7 +32,13 @@ if (process.env.NODE_ENV === "development") {
   origin = ["https://tuitionbatch.vercel.app"];
 }
 // middlewares
-
+app.use(
+  session({
+    secret: "",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(
   cors({
     origin,
@@ -35,5 +57,6 @@ app.use(
 app.use(express.json());
 // routes
 routes(app);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 export default app;

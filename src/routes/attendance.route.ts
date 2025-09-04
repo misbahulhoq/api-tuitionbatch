@@ -31,6 +31,14 @@ attendanceRouter.get("/current-date", async (req, res) => {
   res.send(attendance);
 });
 
+attendanceRouter.get("/history", async (req, res) => {
+  const { email } = req.headers;
+  const attendance = await AttendanceSheet.find({
+    teacher: email,
+  }).populate("sheet.student");
+  res.send(attendance);
+});
+
 attendanceRouter.put("/:attendanceId/:studentId", async (req, res) => {
   const { sheet, date } = req.body;
   const { email } = req.headers;
