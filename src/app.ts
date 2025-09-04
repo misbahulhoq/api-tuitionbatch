@@ -6,6 +6,7 @@ const app = express();
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import session from "express-session";
+import "./config/passport.config";
 
 const swaggerOptions: swaggerJSDoc.Options = {
   swaggerDefinition: {
