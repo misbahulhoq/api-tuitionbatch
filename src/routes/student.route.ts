@@ -6,7 +6,7 @@ const students = e.Router();
 
 students.get("/", async (req, res) => {
   const { email } = req.headers;
-  const students = await Student.find({ teacher: email });
+  const students = await Student.find({ teacher: email, isDeleted: false });
   res.send(students);
 });
 

@@ -4,9 +4,9 @@ import AttendanceSheet from "../models/Attendancesheet";
 const attendanceRouter = e.Router();
 
 attendanceRouter.post("/", async (req, res) => {
-  const { sheet, date } = req.body;
+  const { sheet } = req.body;
   const { email } = req.headers;
-  const formattedDate = new Date(date).toLocaleDateString();
+  const formattedDate = new Date().toLocaleDateString();
   const sheetExists = await AttendanceSheet.findOne({
     teacher: email,
     formattedDate,
@@ -16,7 +16,6 @@ attendanceRouter.post("/", async (req, res) => {
   }
   const attendance = await new AttendanceSheet({
     sheet,
-    date: date ? date : Date.now,
     teacher: email,
   }).save();
   res.send(attendance);
@@ -38,7 +37,6 @@ attendanceRouter.get("/history", async (req, res) => {
     teacher: email,
   }).populate("sheet.student");
   console.log(attendance);
-  console.log(attendance[0]?.sheet);
   res.send(attendance);
 });
 
