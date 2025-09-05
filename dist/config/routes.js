@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const student_1 = __importDefault(require("../routes/student"));
-const attendance_1 = __importDefault(require("../routes/attendance"));
+const student_route_1 = __importDefault(require("../routes/student.route"));
+const attendance_route_1 = __importDefault(require("../routes/attendance.route"));
 const routes = (app) => {
-    app.use("/api/students", student_1.default);
-    app.use("/api/attendance", attendance_1.default);
+    app.use("/students", student_route_1.default);
+    app.use("/attendance", attendance_route_1.default);
 };
 exports.default = routes;

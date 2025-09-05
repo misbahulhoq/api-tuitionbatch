@@ -4,29 +4,39 @@ import AttendanceSheet from "../models/Attendancesheet";
 const attendanceRouter = e.Router();
 
 attendanceRouter.post("/", async (req, res) => {
-  const { sheet } = req.body;
+  // date is coming is ISO format.
+  const { sheet, date } = req.body;
   const { email } = req.headers;
-  const formattedDate = new Date().toLocaleDateString();
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   const sheetExists = await AttendanceSheet.findOne({
     teacher: email,
     formattedDate,
   });
   if (sheetExists) {
-    return res.status(208).send({ message: "Sheet already exists " });
+    return res.status(208).send({ message: "Sheet already exists" });
   }
   const attendance = await new AttendanceSheet({
     sheet,
+    date: new Date(date),
     teacher: email,
+    formattedDate,
   }).save();
   res.send(attendance);
 });
 
 attendanceRouter.get("/current-date", async (req, res) => {
   const { email } = req.headers;
-  console.log(email);
+  // The formatted date would be passed from the front-end as a query param.
+  const formattedDate = req.query.date;
   const attendance = await AttendanceSheet.find({
     teacher: email,
-    formattedDate: new Date().toLocaleDateString(),
+    formattedDate,
   }).populate("sheet.student");
   res.send(attendance);
 });
@@ -35,8 +45,9 @@ attendanceRouter.get("/history", async (req, res) => {
   const { email } = req.headers;
   const attendance = await AttendanceSheet.find({
     teacher: email,
-  }).populate("sheet.student");
-  console.log(attendance);
+  })
+    .sort({ date: -1 })
+    .populate("sheet.student");
   res.send(attendance);
 });
 

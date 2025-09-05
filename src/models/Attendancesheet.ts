@@ -4,12 +4,11 @@ const attendanceSchema = new mongoose.Schema(
   {
     date: {
       type: Date,
-      default: new Date(),
+      required: true,
     },
     formattedDate: {
       type: String,
       required: true,
-      default: new Date().toLocaleDateString(),
     },
     sheet: {
       type: [

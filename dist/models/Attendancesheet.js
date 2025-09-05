@@ -8,12 +8,10 @@ const attendanceSchema = new mongoose_1.default.Schema({
     date: {
         type: Date,
         required: true,
-        default: Date.now,
     },
     formattedDate: {
         type: String,
         required: true,
-        default: new Date().toLocaleDateString(),
     },
     sheet: {
         type: [
@@ -33,6 +31,7 @@ const attendanceSchema = new mongoose_1.default.Schema({
     },
     teacher: {
         type: String,
+        match: [/.+\@.+\..+/, "Please enter a valid email address"],
         required: true,
     },
 }, { timestamps: true });

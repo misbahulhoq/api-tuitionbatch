@@ -43,7 +43,7 @@ students.delete("/:id", async (req, res) => {
   if (!found) {
     return res.status(404).send({ message: "Student not found" });
   }
-  const student = await Student.findByIdAndDelete(id);
+  const student = await Student.findByIdAndUpdate(id, { isDeleted: true });
   const attendance = await AttendanceSheet.findOne({
     teacher: email,
     formattedDate: new Date().toLocaleDateString(),
