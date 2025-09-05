@@ -52,11 +52,13 @@ attendanceRouter.get("/current-date", (req, res) => __awaiter(void 0, void 0, vo
 }));
 attendanceRouter.get("/history", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
+    const { limit = 10 } = req.query;
     const attendance = yield Attendancesheet_1.default.find({
         teacher: email,
     })
         .sort({ date: -1 })
-        .populate("sheet.student");
+        .populate("sheet.student")
+        .limit(Number(limit));
     res.send(attendance);
 }));
 attendanceRouter.put("/:attendanceId/:studentId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

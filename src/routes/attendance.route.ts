@@ -43,11 +43,13 @@ attendanceRouter.get("/current-date", async (req, res) => {
 
 attendanceRouter.get("/history", async (req, res) => {
   const { email } = req.headers;
+  const { limit = 10 } = req.query;
   const attendance = await AttendanceSheet.find({
     teacher: email,
   })
     .sort({ date: -1 })
-    .populate("sheet.student");
+    .populate("sheet.student")
+    .limit(Number(limit));
   res.send(attendance);
 });
 
