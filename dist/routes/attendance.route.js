@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Attendancesheet_1 = __importDefault(require("../models/Attendancesheet"));
+const getMonthAndYear_1 = require("../utils/getMonthAndYear");
 const attendanceRouter = express_1.default.Router();
 attendanceRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // date is coming is ISO format.
@@ -52,14 +53,28 @@ attendanceRouter.get("/current-date", (req, res) => __awaiter(void 0, void 0, vo
 }));
 attendanceRouter.get("/history", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
-    const { limit = 10 } = req.query;
+    const { limit = 10, month } = req.query;
     const attendance = yield Attendancesheet_1.default.find({
         teacher: email,
     })
         .sort({ date: -1 })
         .populate("sheet.student")
         .limit(Number(limit));
-    res.send(attendance);
+    const monthFilter = [];
+    attendance.forEach((a) => {
+        const monthAndYear = (0, getMonthAndYear_1.getMonthAndYear)(a.date);
+        if (!monthFilter.includes(monthAndYear))
+            monthFilter.push(monthAndYear);
+    });
+    res.send({
+        monthFilter,
+        attendance: month
+            ? attendance.filter((a) => {
+                const monthAndYear = (0, getMonthAndYear_1.getMonthAndYear)(a.date);
+                return monthAndYear === month;
+            })
+            : attendance,
+    });
 }));
 attendanceRouter.put("/:attendanceId/:studentId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { sheet, date } = req.body;

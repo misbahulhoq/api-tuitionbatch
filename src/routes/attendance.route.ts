@@ -1,5 +1,6 @@
 import e from "express";
 import AttendanceSheet from "../models/Attendancesheet";
+import { getMonthAndYear } from "../utils/getMonthAndYear";
 
 const attendanceRouter = e.Router();
 
@@ -43,14 +44,29 @@ attendanceRouter.get("/current-date", async (req, res) => {
 
 attendanceRouter.get("/history", async (req, res) => {
   const { email } = req.headers;
-  const { limit = 10 } = req.query;
+  const { limit = 10, month } = req.query;
   const attendance = await AttendanceSheet.find({
     teacher: email,
   })
     .sort({ date: -1 })
     .populate("sheet.student")
     .limit(Number(limit));
-  res.send(attendance);
+  const monthFilter: string[] = [];
+
+  attendance.forEach((a) => {
+    const monthAndYear = getMonthAndYear(a.date);
+    if (!monthFilter.includes(monthAndYear)) monthFilter.push(monthAndYear);
+  });
+
+  res.send({
+    monthFilter,
+    attendance: month
+      ? attendance.filter((a) => {
+          const monthAndYear = getMonthAndYear(a.date);
+          return monthAndYear === month;
+        })
+      : attendance,
+  });
 });
 
 attendanceRouter.put("/:attendanceId/:studentId", async (req, res) => {
