@@ -17,8 +17,11 @@ const Student_1 = __importDefault(require("../models/Student"));
 const Attendancesheet_1 = __importDefault(require("../models/Attendancesheet"));
 const students = express_1.default.Router();
 students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email } = req.headers;
-    const students = yield Student_1.default.find({ teacher: email, isDeleted: false });
+    const email = req.headers["email"];
+    const students = yield Student_1.default.find({
+        teacher: email,
+        isDeleted: false,
+    }).lean();
     res.send(students);
 }));
 // TODO: when a new student is added, that should also be added to attendance sheet.

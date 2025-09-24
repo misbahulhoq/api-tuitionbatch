@@ -24,7 +24,6 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 dbConnect();
 
 let origin;
-console.log(process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === "development") {
   origin = "http://localhost:3000";
@@ -41,10 +40,12 @@ app.use(
       "Authorization",
       "authToken",
       "Content-Type",
-      "authtoken",
+      "authToken",
       "email",
+      "X-User-Email",
+      "x-user-email",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
 app.use(express.json());

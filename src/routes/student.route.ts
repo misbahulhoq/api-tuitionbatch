@@ -5,8 +5,11 @@ import AttendanceSheet from "../models/Attendancesheet";
 const students = e.Router();
 
 students.get("/", async (req, res) => {
-  const { email } = req.headers;
-  const students = await Student.find({ teacher: email, isDeleted: false });
+  const email = req.headers["email"];
+  const students = await Student.find({
+    teacher: email,
+    isDeleted: false,
+  }).lean();
   res.send(students);
 });
 

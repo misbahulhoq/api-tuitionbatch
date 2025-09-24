@@ -14,17 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbConnect = dbConnect;
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const env_config_1 = require("./env.config");
 function dbConnect() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // mongoose.connect(
-            //   process.env.NODE_ENV === "development"
-            //     ? (process.env.MONGO_URL_DEV as string)
-            //     : (process.env.MONGO_URL as string)
-            // );
-            mongoose_1.default.connect(process.env.MONGO_URL);
+            mongoose_1.default.connect(env_config_1.envVars.MONGO_URL);
             console.log("Database connected");
         }
         catch (error) {
