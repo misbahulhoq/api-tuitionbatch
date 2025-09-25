@@ -35,10 +35,12 @@ attendanceRouter.get("/current-date", async (req, res) => {
   const { email } = req.headers;
   // The formatted date would be passed from the front-end as a query param.
   const formattedDate = req.query.date;
-  const attendance = await AttendanceSheet.find({
+  const attendance = await AttendanceSheet.findOne({
     teacher: email,
     formattedDate,
-  }).populate("sheet.student");
+  })
+    .populate("sheet.student")
+    .lean();
   res.send(attendance);
 });
 
