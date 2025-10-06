@@ -55,6 +55,9 @@ const studentSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    descriptions: {
+        type: [[Number]],
+    },
 });
 const Student = mongoose_1.default.model("Student", studentSchema);
 exports.default = Student;
