@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
     origin = "http://localhost:3000";
 }
 else {
-    origin = ["https://tuitionbatch.vercel.app"];
+    origin = ["https://tuitionbatch.vercel.app", "http://localhost:3000"];
 }
 // middlewares
 app.use((0, cors_1.default)({
