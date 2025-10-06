@@ -1,8 +1,8 @@
-import e from "express";
+import express from "express";
 import AttendanceSheet from "../models/Attendancesheet";
 import { getMonthAndYear } from "../utils/getMonthAndYear";
 
-const attendanceRouter = e.Router();
+const attendanceRouter = express.Router();
 
 attendanceRouter.post("/", async (req, res) => {
   // date is coming is ISO format.
