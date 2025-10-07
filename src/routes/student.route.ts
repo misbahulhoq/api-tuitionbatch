@@ -61,10 +61,10 @@ students.delete("/:id", async (req, res) => {
 
 students.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, level } = req.body;
+  const { name, level, descriptions } = req.body;
   const student = await Student.findByIdAndUpdate(
     id,
-    { name, level },
+    { name, level, descriptions: descriptions },
     { new: true }
   );
   res.send(student);

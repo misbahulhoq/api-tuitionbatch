@@ -68,8 +68,8 @@ students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 students.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, level } = req.body;
-    const student = yield Student_1.default.findByIdAndUpdate(id, { name, level }, { new: true });
+    const { name, level, descriptions } = req.body;
+    const student = yield Student_1.default.findByIdAndUpdate(id, { name, level, descriptions: descriptions }, { new: true });
     res.send(student);
 }));
 exports.default = students;
