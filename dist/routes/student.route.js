@@ -70,6 +70,9 @@ students.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const { id } = req.params;
     const { name, level, descriptions } = req.body;
     const student = yield Student_1.default.findByIdAndUpdate(id, { name, level, descriptions: descriptions }, { new: true });
-    res.send(student);
+    res.status(200).send({
+        success: true,
+        data: student,
+    });
 }));
 exports.default = students;

@@ -67,7 +67,10 @@ students.put("/:id", async (req, res) => {
     { name, level, descriptions: descriptions },
     { new: true }
   );
-  res.send(student);
+  res.status(200).send({
+    success: true,
+    data: student,
+  });
 });
 
 export default students;
