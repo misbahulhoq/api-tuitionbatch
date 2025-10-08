@@ -1,5 +1,5 @@
 import express from "express";
-import AttendanceSheet from "../models/Attendancesheet";
+import AttendanceSheet from "../models/AttendanceSheet";
 import { getMonthAndYear } from "../utils/getMonthAndYear";
 
 const attendanceRouter = express.Router();
@@ -73,8 +73,6 @@ attendanceRouter.get("/history", async (req, res) => {
 });
 
 attendanceRouter.put("/:attendanceId/:studentId", async (req, res) => {
-  const { sheet, date } = req.body;
-  const { email } = req.headers;
   const { attendanceId, studentId } = req.params;
 
   try {

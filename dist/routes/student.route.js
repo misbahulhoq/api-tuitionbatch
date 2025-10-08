@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Student_1 = __importDefault(require("../models/Student"));
-const Attendancesheet_1 = __importDefault(require("../models/Attendancesheet"));
+const AttendanceSheet_1 = __importDefault(require("../models/AttendanceSheet"));
 const students = express_1.default.Router();
 students.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.headers["email"];
@@ -37,7 +37,7 @@ students.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         teacher,
         uid,
     }).save();
-    const attendance = yield Attendancesheet_1.default.findOne({
+    const attendance = yield AttendanceSheet_1.default.findOne({
         teacher,
         formattedDate: new Date().toLocaleDateString(),
     });
@@ -56,7 +56,7 @@ students.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.status(404).send({ message: "Student not found" });
     }
     const student = yield Student_1.default.findByIdAndUpdate(id, { isDeleted: true });
-    const attendance = yield Attendancesheet_1.default.findOne({
+    const attendance = yield AttendanceSheet_1.default.findOne({
         teacher: email,
         formattedDate: new Date().toLocaleDateString(),
     });

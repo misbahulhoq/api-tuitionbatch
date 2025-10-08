@@ -1,6 +1,6 @@
 import e from "express";
 import Student from "../models/Student";
-import AttendanceSheet from "../models/Attendancesheet";
+import AttendanceSheet from "../models/AttendanceSheet";
 
 const students = e.Router();
 

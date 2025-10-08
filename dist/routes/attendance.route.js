@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const Attendancesheet_1 = __importDefault(require("../models/Attendancesheet"));
+const AttendanceSheet_1 = __importDefault(require("../models/AttendanceSheet"));
 const getMonthAndYear_1 = require("../utils/getMonthAndYear");
 const attendanceRouter = express_1.default.Router();
 attendanceRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,14 +26,14 @@ attendanceRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, funct
         month: "long",
         day: "numeric",
     });
-    const sheetExists = yield Attendancesheet_1.default.findOne({
+    const sheetExists = yield AttendanceSheet_1.default.findOne({
         teacher: email,
         formattedDate,
     });
     if (sheetExists) {
         return res.status(208).send({ message: "Sheet already exists" });
     }
-    const attendance = yield new Attendancesheet_1.default({
+    const attendance = yield new AttendanceSheet_1.default({
         sheet,
         date: new Date(date),
         teacher: email,
@@ -46,7 +46,7 @@ attendanceRouter.get("/current-date", (req, res) => __awaiter(void 0, void 0, vo
     // The formatted date would be passed from the front-end as a query param.
     const formattedDate = req.query.date;
     console.log(formattedDate);
-    const attendance = yield Attendancesheet_1.default.findOne({
+    const attendance = yield AttendanceSheet_1.default.findOne({
         teacher: email,
         formattedDate,
     })
@@ -57,7 +57,7 @@ attendanceRouter.get("/current-date", (req, res) => __awaiter(void 0, void 0, vo
 attendanceRouter.get("/history", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.headers;
     const { limit = 10, month } = req.query;
-    const attendance = yield Attendancesheet_1.default.find({
+    const attendance = yield AttendanceSheet_1.default.find({
         teacher: email,
     })
         .sort({ date: -1 })
@@ -80,11 +80,9 @@ attendanceRouter.get("/history", (req, res) => __awaiter(void 0, void 0, void 0,
     });
 }));
 attendanceRouter.put("/:attendanceId/:studentId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { sheet, date } = req.body;
-    const { email } = req.headers;
     const { attendanceId, studentId } = req.params;
     try {
-        const attendance = yield Attendancesheet_1.default.findOne({
+        const attendance = yield AttendanceSheet_1.default.findOne({
             _id: attendanceId,
             "sheet.student": studentId,
         });
